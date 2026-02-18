@@ -1,19 +1,23 @@
-app = "tiktok-audit-backend"
-primary_region = "gru" # São Paulo (mude para sua preferência)
+# fly.toml app configuration file generated for tiktok-auditpro-backend on 2026-02-18T16:48:58Z
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'tiktok-auditpro-backend'
+primary_region = 'ams'
 
 [build]
 
 [http_service]
-  internal_port = 3001
+  internal_port = 8080
   force_https = true
-  auto_stop_machines = true
+  auto_stop_machines = 'stop'
   auto_start_machines = true
   min_machines_running = 0
-  processes = ["app"]
-
-[env]
-  PORT = "3001"
+  processes = ['app']
 
 [[vm]]
-  size = "shared-cpu-1x"
-  memory_mb = 512
+  memory = '1gb'
+  cpu_kind = 'shared'
+  cpus = 1
+  memory_mb = 256
