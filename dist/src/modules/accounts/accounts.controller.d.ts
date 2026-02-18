@@ -4,10 +4,10 @@ export declare class AccountsController {
     private readonly accountsService;
     constructor(accountsService: AccountsService);
     addAccount(userId: string, dto: AddAccountDto): Promise<{
-        userId: string;
         id: string;
-        tiktokId: string | null;
         username: string;
+        userId: string;
+        tiktokId: string | null;
         displayName: string | null;
         bio: string | null;
         avatarUrl: string | null;
@@ -26,13 +26,13 @@ export declare class AccountsController {
     getUserAccounts(userId: string): Promise<{
         isOAuthConnected: boolean;
         snapshots: {
+            id: string;
+            videos: number;
             accountId: string;
             comments: number;
-            id: string;
             followers: number;
             following: number;
             likes: number;
-            videos: number;
             shares: number;
             views: number;
             followersDelta: number;
@@ -46,10 +46,10 @@ export declare class AccountsController {
         _count: {
             reports: number;
         };
-        userId: string;
         id: string;
-        tiktokId: string | null;
         username: string;
+        userId: string;
+        tiktokId: string | null;
         displayName: string | null;
         bio: string | null;
         avatarUrl: string | null;
@@ -64,13 +64,13 @@ export declare class AccountsController {
     getAccountById(userId: string, accountId: string): Promise<{
         isOAuthConnected: boolean;
         snapshots: {
+            id: string;
+            videos: number;
             accountId: string;
             comments: number;
-            id: string;
             followers: number;
             following: number;
             likes: number;
-            videos: number;
             shares: number;
             views: number;
             followersDelta: number;
@@ -82,9 +82,9 @@ export declare class AccountsController {
             fetchedAt: Date;
         }[];
         reports: {
-            accountId: string;
-            userId: string;
             id: string;
+            userId: string;
+            accountId: string;
             createdAt: Date;
             status: import(".prisma/client").$Enums.ReportStatus;
             healthScore: number | null;
@@ -97,10 +97,10 @@ export declare class AccountsController {
             recommendations: import("@prisma/client/runtime/client").JsonValue | null;
             generatedAt: Date | null;
         }[];
-        userId: string;
         id: string;
-        tiktokId: string | null;
         username: string;
+        userId: string;
+        tiktokId: string | null;
         displayName: string | null;
         bio: string | null;
         avatarUrl: string | null;
@@ -113,13 +113,13 @@ export declare class AccountsController {
         scopes: string | null;
     }>;
     addMetrics(userId: string, accountId: string, dto: FetchMetricsDto): Promise<{
+        id: string;
+        videos: number;
         accountId: string;
         comments: number;
-        id: string;
         followers: number;
         following: number;
         likes: number;
-        videos: number;
         shares: number;
         views: number;
         followersDelta: number;

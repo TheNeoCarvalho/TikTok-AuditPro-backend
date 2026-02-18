@@ -78,9 +78,9 @@ let TikTokApiService = TikTokApiService_1 = class TikTokApiService {
     ];
     constructor(configService) {
         this.configService = configService;
-        this.clientKey = this.configService.getOrThrow('TIKTOK_CLIENT_KEY');
-        this.clientSecret = this.configService.getOrThrow('TIKTOK_CLIENT_SECRET');
-        this.redirectUri = this.configService.getOrThrow('TIKTOK_REDIRECT_URI');
+        this.clientKey = this.configService.getOrThrow('TIKTOK_CLIENT_KEY').trim();
+        this.clientSecret = this.configService.getOrThrow('TIKTOK_CLIENT_SECRET').trim();
+        this.redirectUri = this.configService.getOrThrow('TIKTOK_REDIRECT_URI').trim();
     }
     generateCodeVerifier() {
         return crypto.randomBytes(32).toString('base64url');

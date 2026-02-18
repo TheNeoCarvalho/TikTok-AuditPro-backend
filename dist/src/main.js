@@ -6,8 +6,12 @@ const app_module_1 = require("./app.module");
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     app.setGlobalPrefix('api');
+    const allowedOrigins = [
+        process.env.FRONTEND_URL,
+        'http://localhost:3000',
+    ].filter(Boolean);
     app.enableCors({
-        origin: ['http://localhost:3000'],
+        origin: allowedOrigins,
         methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
         credentials: true,
     });

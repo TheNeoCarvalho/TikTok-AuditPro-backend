@@ -7,10 +7,10 @@ export declare class AccountsService {
     private readonly logger;
     constructor(prisma: PrismaService, metricsSyncService: MetricsSyncService);
     addAccount(userId: string, dto: AddAccountDto): Promise<{
-        userId: string;
         id: string;
-        tiktokId: string | null;
         username: string;
+        userId: string;
+        tiktokId: string | null;
         displayName: string | null;
         bio: string | null;
         avatarUrl: string | null;
@@ -29,13 +29,13 @@ export declare class AccountsService {
     getUserAccounts(userId: string): Promise<{
         isOAuthConnected: boolean;
         snapshots: {
+            id: string;
+            videos: number;
             accountId: string;
             comments: number;
-            id: string;
             followers: number;
             following: number;
             likes: number;
-            videos: number;
             shares: number;
             views: number;
             followersDelta: number;
@@ -49,10 +49,10 @@ export declare class AccountsService {
         _count: {
             reports: number;
         };
-        userId: string;
         id: string;
-        tiktokId: string | null;
         username: string;
+        userId: string;
+        tiktokId: string | null;
         displayName: string | null;
         bio: string | null;
         avatarUrl: string | null;
@@ -67,13 +67,13 @@ export declare class AccountsService {
     getAccountById(userId: string, accountId: string): Promise<{
         isOAuthConnected: boolean;
         snapshots: {
+            id: string;
+            videos: number;
             accountId: string;
             comments: number;
-            id: string;
             followers: number;
             following: number;
             likes: number;
-            videos: number;
             shares: number;
             views: number;
             followersDelta: number;
@@ -85,9 +85,9 @@ export declare class AccountsService {
             fetchedAt: Date;
         }[];
         reports: {
-            accountId: string;
-            userId: string;
             id: string;
+            userId: string;
+            accountId: string;
             createdAt: Date;
             status: import(".prisma/client").$Enums.ReportStatus;
             healthScore: number | null;
@@ -100,10 +100,10 @@ export declare class AccountsService {
             recommendations: import("@prisma/client/runtime/client").JsonValue | null;
             generatedAt: Date | null;
         }[];
-        userId: string;
         id: string;
-        tiktokId: string | null;
         username: string;
+        userId: string;
+        tiktokId: string | null;
         displayName: string | null;
         bio: string | null;
         avatarUrl: string | null;
@@ -116,13 +116,13 @@ export declare class AccountsService {
         scopes: string | null;
     }>;
     addMetricSnapshot(userId: string, accountId: string, dto: FetchMetricsDto): Promise<{
+        id: string;
+        videos: number;
         accountId: string;
         comments: number;
-        id: string;
         followers: number;
         following: number;
         likes: number;
-        videos: number;
         shares: number;
         views: number;
         followersDelta: number;
