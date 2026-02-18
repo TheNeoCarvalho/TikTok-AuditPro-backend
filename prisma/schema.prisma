@@ -1,0 +1,132 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── Auth Context ───────────────────────────────────────────
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String?
+  plan      Plan     @default(FREE)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  accounts TikTokAccount[]
+  reports  AuditReport[]
+
+  @@map("users")
+}
+
+enum Plan {
+  FREE
+  PRO
+  AGENCY
+}
+
+// ─── Accounts Context ───────────────────────────────────────
+
+model TikTokAccount {
+  id          String   @id @default(uuid())
+  tiktokId    String?  @map("tiktok_id")
+  username    String
+  displayName String?  @map("display_name")
+  bio         String?
+  avatarUrl   String?  @map("avatar_url")
+  isPrivate   Boolean  @default(false) @map("is_private")
+  isVerified  Boolean  @default(false) @map("is_verified")
+  profileUrl  String?  @map("profile_url")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  // TikTok OAuth v2 tokens
+  openId          String?   @map("open_id")
+  accessToken     String?   @map("access_token")
+  refreshToken    String?   @map("refresh_token")
+  tokenExpiresAt  DateTime? @map("token_expires_at")
+  refreshExpiresAt DateTime? @map("refresh_expires_at")
+  scopes          String?   // comma-separated scopes
+
+  userId String @map("user_id")
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  snapshots MetricSnapshot[]
+  reports   AuditReport[]
+
+  @@unique([userId, username])
+  @@map("tiktok_accounts")
+}
+
+// ─── Analytics Context (Time-Series Ready) ──────────────────
+
+model MetricSnapshot {
+  id        String   @id @default(uuid())
+  followers Int      @default(0)
+  following Int      @default(0)
+  likes     Int      @default(0)
+  videos    Int      @default(0)
+  comments  Int      @default(0)
+  shares    Int      @default(0)
+  views     Int      @default(0)
+
+  // Deltas for trend analysis
+  followersDelta Int @default(0) @map("followers_delta")
+  likesDelta     Int @default(0) @map("likes_delta")
+  viewsDelta     Int @default(0) @map("views_delta")
+
+  // Calculated rates
+  engagementRate Float @default(0) @map("engagement_rate")
+  growthRate     Float @default(0) @map("growth_rate")
+
+  source    String   @default("api") // api | manual | import
+  fetchedAt DateTime @default(now()) @map("fetched_at")
+
+  accountId String       @map("account_id")
+  account   TikTokAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@index([accountId, fetchedAt])
+  @@map("metric_snapshots")
+}
+
+// ─── Reports Context ────────────────────────────────────────
+
+model AuditReport {
+  id        String       @id @default(uuid())
+  status    ReportStatus @default(PENDING)
+
+  // Health Score (0-100)
+  healthScore    Int?   @map("health_score")
+  growthScore    Int?   @map("growth_score")
+  engagementScore Int?  @map("engagement_score")
+  consistencyScore Int? @map("consistency_score")
+  riskScore      Int?   @map("risk_score")
+
+  // Insights JSON
+  insights Json?
+  warnings Json?
+  recommendations Json?
+
+  generatedAt DateTime? @map("generated_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  accountId String       @map("account_id")
+  account   TikTokAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  userId String @map("user_id")
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([accountId, createdAt])
+  @@map("audit_reports")
+}
+
+enum ReportStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
